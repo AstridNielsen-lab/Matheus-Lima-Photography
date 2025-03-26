@@ -12,7 +12,6 @@ Este projeto é o site oficial de **Matheus Lima Fotografias**, desenvolvido par
 ## 🛠️ Tecnologias Utilizadas
 - **HTML, CSS, JavaScript** para o frontend responsivo.
 - **API Gemini 1.5 Flash** para chatbot interativo.
-- **Bolt.new** para automação da criação do site.
 
 ## ⚙️ Configuração da API do Chat
 Para integrar a IA de atendimento, utilize a seguinte configuração na aplicação:
