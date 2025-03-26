@@ -29,3 +29,18 @@ Substitua `SUA_CHAVE_DE_API_AQUI` pela chave correta de acesso à API.
 - O projeto foi desenvolvido para **uso interno**, sendo vedada sua publicação ou compartilhamento sem autorização prévia.
 
 🔒 **Todos os direitos reservados - 2024**. Projeto de uso restrito para Matheus Lima Fotografias.
+
+## Contato
+
+Caso tenha dúvidas, sugestões ou problemas, entre em contato conosco:
+
+- E-mail: juliocamposmachado@gmail.com 
+- Telefone: +55 11 97060-3441
+
+## Créditos
+
+Este projeto foi desenvolvido por **Julio Campos Machado**.
+
+---
+
+© 2024 Like Look Solutions. Todos os direitos reservados.
