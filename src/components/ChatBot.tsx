@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, Send } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Send, Mic } from 'lucide-react';
 
 interface ChatBotProps {
   onClose: () => void;
@@ -11,6 +11,48 @@ const ChatBot: React.FC<ChatBotProps> = ({ onClose }) => {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [recognition, setRecognition] = useState<SpeechRecognition | null>(null);
+
+  useEffect(() => {
+    if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognitionInstance = new SpeechRecognition();
+      recognitionInstance.lang = 'pt-BR';
+      recognitionInstance.continuous = false;
+      recognitionInstance.interimResults = false;
+
+      recognitionInstance.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setInput(transcript);
+        setIsListening(false);
+      };
+
+      recognitionInstance.onerror = () => {
+        setIsListening(false);
+      };
+
+      setRecognition(recognitionInstance);
+    }
+  }, []);
+
+  const speakResponse = (text: string) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'pt-BR';
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const toggleListening = () => {
+    if (!recognition) return;
+
+    if (isListening) {
+      recognition.stop();
+      setIsListening(false);
+    } else {
+      recognition.start();
+      setIsListening(true);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +68,7 @@ const ChatBot: React.FC<ChatBotProps> = ({ onClose }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer AIzaSyAuFi5KtPsMJI5IC8c5FjvYD5IbuBdwH_U`
+          'Authorization': `Bearer AIzaSyAxtrfdpByKg-1xK_iqvGpjPO4eIaKVis8`
         },
         body: JSON.stringify({
           contents: [{
@@ -41,11 +83,11 @@ const ChatBot: React.FC<ChatBotProps> = ({ onClose }) => {
       const botResponse = data.candidates[0].content.parts[0].text;
       
       setMessages(prev => [...prev, { text: botResponse, isUser: false }]);
+      speakResponse(botResponse);
     } catch (error) {
-      setMessages(prev => [...prev, { 
-        text: 'Desculpe, ocorreu um erro. Por favor, tente novamente mais tarde.', 
-        isUser: false 
-      }]);
+      const errorMessage = 'Desculpe, ocorreu um erro. Por favor, tente novamente mais tarde.';
+      setMessages(prev => [...prev, { text: errorMessage, isUser: false }]);
+      speakResponse(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -53,7 +95,6 @@ const ChatBot: React.FC<ChatBotProps> = ({ onClose }) => {
 
   return (
     <div className="fixed bottom-20 right-6 w-96 bg-zinc-900 rounded-lg shadow-xl z-50">
-      {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-zinc-800">
         <h3 className="text-lg font-serif text-gold">Chat com Matheus Lima</h3>
         <button 
@@ -64,7 +105,6 @@ const ChatBot: React.FC<ChatBotProps> = ({ onClose }) => {
         </button>
       </div>
 
-      {/* Messages */}
       <div className="h-96 overflow-y-auto p-4 space-y-4">
         {messages.map((message, index) => (
           <div
@@ -91,7 +131,6 @@ const ChatBot: React.FC<ChatBotProps> = ({ onClose }) => {
         )}
       </div>
 
-      {/* Input */}
       <form onSubmit={handleSubmit} className="p-4 border-t border-zinc-800">
         <div className="flex gap-2">
           <input
@@ -101,6 +140,15 @@ const ChatBot: React.FC<ChatBotProps> = ({ onClose }) => {
             placeholder="Digite sua mensagem..."
             className="flex-1 bg-zinc-800 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-gold"
           />
+          <button
+            type="button"
+            onClick={toggleListening}
+            className={`p-2 rounded-lg transition-colors ${
+              isListening ? 'bg-red-500' : 'bg-zinc-700 hover:bg-zinc-600'
+            }`}
+          >
+            <Mic className="w-5 h-5" />
+          </button>
           <button
             type="submit"
             disabled={isLoading}

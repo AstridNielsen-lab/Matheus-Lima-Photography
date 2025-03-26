@@ -19,9 +19,16 @@ const Contact = () => {
                 <Phone className="w-5 h-5" />
                 <span>(44) 99982-3193</span>
               </a>
+              <a 
+                href="mailto:mattheus.macchado@gmail.com"
+                className="flex items-center gap-3 text-gold hover:text-gold/80 transition-colors"
+              >
+                <Mail className="w-5 h-5" />
+                <span>mattheus.macchado@gmail.com</span>
+              </a>
               <div className="flex items-center gap-3 text-gold">
                 <MapPin className="w-5 h-5" />
-                <span>Paranavaí, PR</span>
+                <span>Rua Guaporé, 1183, Centro, Paranavaí-PR, Brasil</span>
               </div>
             </div>
           </div>
@@ -58,6 +65,10 @@ const Contact = () => {
             </button>
           </form>
         </div>
+      </div>
+      <div className="text-center mt-16 text-sm text-zinc-500">
+        <p>Desenvolvido por <a href="https://likelooksolutions.com" target="_blank" rel="noopener noreferrer" className="text-gold hover:text-gold/80">Like Look Solutions</a></p>
+        <p>WhatsApp: <a href="https://wa.me/5511992946628" target="_blank" rel="noopener noreferrer" className="text-gold hover:text-gold/80">+55 11 99294-6628</a></p>
       </div>
     </section>
   );
